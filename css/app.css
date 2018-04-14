@@ -54,7 +54,7 @@ h1 {
 .deck .card {
     height: 125px;
     width: 125px;
-    background: #2e3d49;
+    background: #a1c7e5;
     font-size: 0;
     color: #ffffff;
     border-radius: 8px;
@@ -75,10 +75,79 @@ h1 {
     font-size: 33px;
 }
 
+@-webkit-keyframes success {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.22); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+@-moz-keyframes success {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.22); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+@keyframes success {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.22); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+@-webkit-keyframes fail {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(0); }
+    30% { transform: translateX(10px); }
+    40% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    70% { transform: translateX(10px); }
+    80% { transform: translateX(-10px); }
+    90% { transform: translateX(0); }
+    100% { transform: translateX(0); }
+}
+
+@-moz-keyframes fail {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(0); }
+    30% { transform: translateX(10px); }
+    40% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    70% { transform: translateX(10px); }
+    80% { transform: translateX(-10px); }
+    90% { transform: translateX(0); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes fail {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(0); }
+    30% { transform: translateX(10px); }
+    40% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    70% { transform: translateX(10px); }
+    80% { transform: translateX(-10px); }
+    90% { transform: translateX(0); }
+    100% { transform: translateX(0); }
+}
+
 .deck .card.match {
     cursor: default;
     background: #02ccba;
     font-size: 33px;
+    animation: success ease .8s forwards;
+}
+
+.deck .card.error {
+    animation: fail ease .8s forwards;
+    background: #d84a14;
 }
 
 /*

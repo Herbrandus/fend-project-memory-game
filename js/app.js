@@ -21,6 +21,17 @@ const allCardsArray = [
 	'bomb'
 ];
 
+const uniqueCardsArray = [
+	'diamond',
+	'plane',
+	'anchor',
+	'bolt',
+	'cube',
+	'leaf',
+	'bike',
+	'bomb'
+];
+
 const cardIcons = {
 	diamond: 'fa-diamond',
 	plane: 'fa-paper-plane-o',
@@ -32,26 +43,57 @@ const cardIcons = {
 	bomb: 'fa-bomb'
 };
 
-document.querySelector('ul.deck').innerHTML = '';
+let activeCards = [];
+let openCards = [];
 
-/*
-	<li class="card">
-        <i class="fa fa-diamond"></i>
-    </li>
-    <li class="card open show">
-        <i class="fa fa-bolt"></i>
-    </li>
-    <li class="card match">
-        <i class="fa fa-anchor"></i>
-    </li>
-*/
+let pauseTimer;
+let disablePlay = false;
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+const resetButton = document.querySelector('.restart');
+const deck = document.querySelector('ul.deck');
+
+// empty deck
+deck.innerHTML = '';
+
+function reset() {
+
+	console.log('reset!');
+
+	let shuffledDeck = shuffle(allCardsArray);
+	let deckHtml = '';
+	activeCards = [];
+
+	shuffledDeck.forEach(function(elem){
+		let cardClass = cardIcons[elem];
+	 	deckHtml += `
+	 		<li class="card">
+	 			<i class="fa ${cardClass}"></i>
+			</li>`;
+
+		activeCards.push(elem);
+	});
+
+	deck.innerHTML = deckHtml;
+
+	console.log(activeCards);
+
+	let cards = document.querySelectorAll('.card');
+
+	for (var i=0; i<cards.length; i++) {
+
+		cards[i].addEventListener('click', function(){
+			if (!disablePlay) {
+				openCard(this);
+			}			
+		});
+	}
+}
+
+reset();
+
+resetButton.addEventListener('click', function(){
+	reset();
+});
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -68,17 +110,72 @@ function shuffle(array) {
     return array;
 }
 
-let cards = document.querySelectorAll('.card');
+function openCard (elem) {
+	console.log(elem);
 
-for (var i=0; i<cards.length; i++) {
+	elem.classList.add('open', 'show');
+	let innerClass = elem.querySelector('.fa');
 
-	cards[i].addEventListener('click', function(){
-		openCard(this);
-	});
+	handleOpenCards(innerClass.classList);
 }
 
-function openCard (elem) {
-	elem.classList.add('open', 'show');
+function handleOpenCards (classList) {
+
+	let openCardClass = classList.value;
+
+	uniqueCardsArray.forEach(function(elem){
+		let cardClass = cardIcons[elem];
+		if (openCardClass.indexOf(cardClass) != -1) {
+			openCards.push(elem);
+		}
+	});
+
+	if (openCards.length === 2) {
+		matchCards();
+	}
+}
+
+function matchCards () {
+
+	let shownCards = document.querySelectorAll('.card.open.show');
+	let itsamatch = false;
+
+	if (openCards[0] === openCards[1]) {
+		shownCards[0].classList.add('match');
+		shownCards[1].classList.add('match');
+		itsamatch = true;
+	} else {
+		shownCards[0].classList.add('error');
+		shownCards[1].classList.add('error');
+	}
+
+	disablePlay = true;
+	pauseTimer = setTimeout(function(){
+
+		removeActiveStatus(shownCards[0], itsamatch);
+
+		if (activeCards.length === 0) {
+			console.log('you won!');
+		}
+
+		openCards = [];
+		disablePlay = false;
+
+	}, 1200);
+}
+
+function removeActiveStatus (card, matches) {
+
+	card.classList.remove('open', 'show', 'error');
+
+	if (matches) {
+		openCards.forEach(function(item) {
+			let index = activeCards.indexOf(item);
+			activeCards.splice(index, 1);
+		});
+	}
+
+	console.log(activeCards);
 }
 
 /*
