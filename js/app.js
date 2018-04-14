@@ -2,6 +2,49 @@
  * Create a list that holds all of your cards
  */
 
+const allCardsArray = [
+	'diamond',
+	'diamond',
+	'plane',
+	'plane',
+	'anchor',
+	'anchor',
+	'bolt',
+	'bolt',
+	'cube',
+	'cube',
+	'leaf',
+	'leaf',
+	'bike',
+	'bike',
+	'bomb',
+	'bomb'
+];
+
+const cardIcons = {
+	diamond: 'fa-diamond',
+	plane: 'fa-paper-plane-o',
+	anchor: 'fa-anchor',
+	bolt: 'fa-bolt',
+	cube: 'fa-cube',
+	leaf: 'fa-leaf',
+	bike: 'fa-bicycle',
+	bomb: 'fa-bomb'
+};
+
+document.querySelector('ul.deck').innerHTML = '';
+
+/*
+	<li class="card">
+        <i class="fa fa-diamond"></i>
+    </li>
+    <li class="card open show">
+        <i class="fa fa-bolt"></i>
+    </li>
+    <li class="card match">
+        <i class="fa fa-anchor"></i>
+    </li>
+*/
 
 /*
  * Display the cards on the page
@@ -25,6 +68,18 @@ function shuffle(array) {
     return array;
 }
 
+let cards = document.querySelectorAll('.card');
+
+for (var i=0; i<cards.length; i++) {
+
+	cards[i].addEventListener('click', function(){
+		openCard(this);
+	});
+}
+
+function openCard (elem) {
+	elem.classList.add('open', 'show');
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
