@@ -1,5 +1,9 @@
 /*
- * Create a list that holds all of your cards
+ * Memory game 
+ * Assignment by Udacity
+ * written by Gerben Boersma
+ * april 2018
+ *
  */
 
 // These are all the cards available
@@ -139,12 +143,6 @@ function reset() {
 	movesText.innerHTML = 'Moves';
 	
 }
-
-reset();
-
-resetButton.addEventListener('click', function(){
-	reset();
-});
 
 
 // this function is called when clicking on a card
@@ -327,6 +325,16 @@ function addOneMove () {
 	}
 }
 
+
+// perform a reset at the beginning
+reset();
+
+// add reset functionality to the button
+resetButton.addEventListener('click', function(){
+	reset();
+});
+
+
 /**************************************************************************************
  ************************** Supporting functions **************************************
  **************************************************************************************
@@ -371,18 +379,26 @@ function removeClassesToAll(items, classname) {
  **************************************************************************************
  */
 
+// This is what happens when the player loses
 function youLose () {
 
+	// set display block but wait a bit for the transition
 	endScreen.style.display = 'block';
-	setTimeout(function(){
+	setTimeout(function() {
+		// transition actived with class 'show'
 		endScreen.classList.add('show');
+
+		// Edit text in the ending screen
 		endScreen.querySelector('h2').innerText = 'You lost the game!';
 		endScreen.querySelector('p').innerText = 'You spend ' + movesMade + ' moves on it.';
 	}, 200);
 }
 
+
+// Show ending screen to end the game
 function youWin () {
 
+	// set text to display the amount of stars correctly
 	let movesEndText = '';
 	let movesAmount = parseInt(movesNum.innerText);
 	if (movesAmount > 1) {
@@ -391,33 +407,34 @@ function youWin () {
 		movesEndText = 'star';
 	}
 
+	// set display block but wait a bit for the transition
 	endScreen.style.display = 'block';
-	setTimeout(function(){
+	setTimeout(function() {
+		// transition actived with class 'show'
 		endScreen.classList.add('show');
+
+		// Edit text in the ending screen
 		endScreen.querySelector('h2').innerText = 'Congratulations! You won!';
 		endScreen.querySelector('p').innerText = 'With ' + movesMade + ' moves and ' + movesAmount + ' ' + movesEndText + '!';
 	}, 200);
 }
 
+
+// add event listener to the button for playing the game again
 againButton.addEventListener('click', function() {
 
+	// first reset everything before showing a new game
 	reset();	
 
+	// set display block but wait a bit for the transition
 	endScreen.classList.remove('show');
-	setTimeout(function(){
+	setTimeout(function() {
+
+		// when transition is finished, we can change display
 		endScreen.style.display = 'none';
+
+		// reset texts of ending screen
 		endScreen.querySelector('h2').innerText = '';
 		endScreen.querySelector('p').innerText = '';
 	}, 500);
 });
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
