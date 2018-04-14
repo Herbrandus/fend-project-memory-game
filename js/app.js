@@ -59,6 +59,7 @@ let cards;
 let activeCards;
 let openCards;
 let movesMade;
+let failedMatches;
 let winningSpree;
 
 // these variables are used to disable play while
@@ -95,6 +96,7 @@ function reset() {
 	// reset all starting variables
 	movesMade = 0;
 	winningSpree = 0;
+	failedMatches = 0;
 	activeCards = [];
 	openCards = [];
 	disablePlay = false;
@@ -197,9 +199,14 @@ function matchCards () {
 		shownCards[0].classList.add('error');
 		shownCards[1].classList.add('error');
 		itsamatch = false;
+		failedMatches++;
 
 		// remove a star from the total amount
-		substractOneMove();
+		if (failedMatches === 2) {
+			substractOneMove();
+			failedMatches = 0;
+		}
+		
 		winningSpree = 0;
 	}
 
@@ -212,7 +219,7 @@ function matchCards () {
 
 	// if the player has 3 correct guesses in a row
 	// reward him by returning 1 lost star
-	if (winningSpree === 3) {
+	if (winningSpree === 4) {
 		addOneMove();
 		winningSpree = 0;
 	}
