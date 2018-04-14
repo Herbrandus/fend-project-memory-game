@@ -236,3 +236,19 @@ h2 {
     box-shadow: 0px 1px 12px rgba(0,0,0,0.3);
     cursor: pointer;
 }
+
+#timer {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    color: #888;
+    font-size: 18px;
+}
+
+#moves {
+    position: absolute;
+    top: 25px;
+    right: 120px;
+    color: #888;
+    font-size: 18px;
+}

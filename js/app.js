@@ -62,6 +62,11 @@ let movesMade;
 let failedMatches;
 let winningSpree;
 
+// add display timer
+let playTimer;
+let seconds;
+let minutes;
+
 // these variables are used to disable play while
 // the animations are playing
 let pauseTimer;
@@ -76,7 +81,8 @@ const endScreen = document.getElementById('endingScreen');
 let movesNum = document.querySelector('.moves');
 let movesText = document.querySelector('.movesText');
 let starsContainer = document.querySelector('.stars');
-
+let displayTimer = document.getElementById('timer');
+let movesCounter = document.getElementById('moves');
 
 /**************************************************************************************
  ******************************** Game functions **************************************
@@ -100,6 +106,10 @@ function reset() {
 	activeCards = [];
 	openCards = [];
 	disablePlay = false;
+	seconds = 0;
+	minutes = 0;
+
+	clearInterval(playTimer);
 
 	let deckHtml = '';
 
@@ -143,7 +153,32 @@ function reset() {
 	// reset amount of moves to be made
 	movesNum.innerHTML = startingMoves;
 	movesText.innerHTML = 'Moves';
+	movesCounter.innerText = movesMade;
 	
+	// set timer
+	displayTimer.innerHTML = '0.00';
+
+	playTimer = setInterval(function(){
+
+		let displaySeconds = '';
+
+		seconds += 1;
+
+		if (seconds === 0) {
+			displaySeconds = '00';
+		} else if (seconds < 10) {
+			displaySeconds = '0' + seconds;
+		} else if (seconds === 60) {
+			seconds = 0;
+			displaySeconds = '00';
+			minutes += 1;
+		} else {
+			displaySeconds = seconds;
+		}
+
+		displayTimer.innerHTML = minutes + '.' + displaySeconds;
+
+	}, 1000);
 }
 
 
@@ -216,6 +251,7 @@ function matchCards () {
 
 	// update the amount of moves made
 	movesMade++;
+	movesCounter.innerText = movesMade;
 
 	// if the player has 3 correct guesses in a row
 	// reward him by returning 1 lost star
@@ -303,6 +339,7 @@ function substractOneMove () {
 	// the player lost, so disable play
 	if (movesAmount === 0) {
 
+		addClassesToAll(cards, 'disabled');
 		disablePlay = true;
 
 		// wait a bit before confronting the player with their defeat
@@ -389,6 +426,8 @@ function removeClassesToAll(items, classname) {
 // This is what happens when the player loses
 function youLose () {
 
+	clearInterval(playTimer);
+
 	// set display block but wait a bit for the transition
 	endScreen.style.display = 'block';
 	setTimeout(function() {
@@ -404,6 +443,8 @@ function youLose () {
 
 // Show ending screen to end the game
 function youWin () {
+
+	clearInterval(playTimer);
 
 	// set text to display the amount of stars correctly
 	let movesEndText = '';
