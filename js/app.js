@@ -38,8 +38,9 @@ const uniqueCardsArray = [
 	'bomb'
 ];
 
-// object linking the array names for each card
-// with the class names used to display them
+/* object linking the array names for each card
+ * with the class names used to display them
+ */
 const cardIcons = {
 	diamond: 'fa-diamond',
 	plane: 'fa-paper-plane-o',
@@ -67,8 +68,9 @@ let playTimer;
 let seconds;
 let minutes;
 
-// these variables are used to disable play while
-// the animations are playing
+/* these variables are used to disable play while
+ * the animations are playing
+ */
 let pauseTimer;
 let disablePlay;
 
@@ -89,8 +91,9 @@ let movesCounter = document.getElementById('moves');
  **************************************************************************************
  */
 
-// reset the game to start again
-// Used for the reset button at the top and for the 'play again' button at the end
+/* reset the game to start again
+ * Used for the reset button at the top and for the 'play again' button at the end
+ */
 function reset() {
 
 	// empty deck at first
@@ -115,29 +118,31 @@ function reset() {
 
 	shuffledDeck.forEach(function(elem){
 		let cardClass = cardIcons[elem];
-	 	deckHtml += `
-	 		<li class="card">
-	 			<i class="fa ${cardClass}"></i>
-			</li>`;
+	 	deckHtml += '<li class="card">' +
+	 			'<i class="fa ' + cardClass + '"></i>' +
+				'</li>';
 
 		activeCards.push(elem);
 	});
 
 	deck.innerHTML = deckHtml;
 
-	// now that the deck is shuffled and the cards are
-	// in the DOM, store them in this variable
+	/* now that the deck is shuffled and the cards are
+	 * in the DOM, store them in this variable
+	 */
 	cards = document.querySelectorAll('.card');
 
 	// add the event listeners to all cards in the game
 	for (var i=0; i<cards.length; i++) {
 
 		cards[i].addEventListener('click', function(){
-			// only allow the function when there is no 
-			// animation playing or defeat
+
+			/* only allow the function when there is no 
+			 * animation playing or defeat
+			 */
 			if (!disablePlay) {
 				openCard(this);
-			}			
+			}
 		});
 	}
 
@@ -158,12 +163,14 @@ function reset() {
 	// set timer
 	displayTimer.innerHTML = '0.00';
 
+	// display and set timer for the game
 	playTimer = setInterval(function(){
 
 		let displaySeconds = '';
 
 		seconds += 1;
 
+		// formatting of time string
 		if (seconds === 0) {
 			displaySeconds = '00';
 		} else if (seconds < 10) {
@@ -182,7 +189,8 @@ function reset() {
 }
 
 
-// this function is called when clicking on a card
+/* this function is called when clicking on a card
+ */
 function openCard (elem) {
 
 	elem.classList.add('open', 'show');
@@ -192,7 +200,8 @@ function openCard (elem) {
 }
 
 
-// check if there are more cards than 1 opened
+/* check if there are more cards than 1 opened
+ */
 function handleOpenCards (classList) {
 
 	let openCardClass = classList.value;
@@ -211,14 +220,16 @@ function handleOpenCards (classList) {
 }
 
 
-// function for matching the cards that are open
+/* function for matching the cards that are open
+ */
 function matchCards () {
 
 	let shownCards = document.querySelectorAll('.card.open.show');
 	let itsamatch;
 
-	// when both open cards are the same
-	// show the player it's a match!
+	/* when both open cards are the same
+	 * show the player it's a match!
+	 */
 	if (openCards[0] === openCards[1]) {
 
 		shownCards[0].classList.add('match');
@@ -245,16 +256,18 @@ function matchCards () {
 		winningSpree = 0;
 	}
 
-	// disable the cards visibly by adding a class
-	// to be removed again after the timeOut
+	/* disable the cards visibly by adding a class
+	 * to be removed again after the timeOut
+	 */
 	addClassesToAll(cards, 'disabled');
 
 	// update the amount of moves made
 	movesMade++;
 	movesCounter.innerText = movesMade;
 
-	// if the player has 3 correct guesses in a row
-	// reward him by returning 1 lost star
+	/* if the player has 3 correct guesses in a row
+	 * reward him by returning 1 lost star
+	 */
 	if (winningSpree === 4) {
 		addOneMove();
 		winningSpree = 0;
@@ -267,6 +280,7 @@ function matchCards () {
 		removeActiveStatus(shownCards[0], itsamatch);
 		removeActiveStatus(shownCards[1], itsamatch);
 
+		// if there are no cards left in activeCards, you win!
 		if (activeCards.length === 0) {
 			youWin();
 		}
@@ -290,7 +304,8 @@ function matchCards () {
 }
 
 
-// Remove the card from the active game
+/* Remove the card from the active game
+ */
 function removeActiveStatus (card, matches) {
 
 	card.classList.remove('open', 'show', 'error');
@@ -304,7 +319,8 @@ function removeActiveStatus (card, matches) {
 }
 
 
-// Substract 1 from the available moves left
+/* Substract 1 from the available moves left
+ */
 function substractOneMove () {
 
 	let movesAmount = parseInt(movesNum.innerText);
@@ -316,8 +332,9 @@ function substractOneMove () {
 
 	if (stars.length > 0) {
 		
-		// set all but the remaining stars to invisible
-		// to maintain their position
+		/* set all but the remaining stars to invisible
+		 * to maintain their position
+		 */
 		for (var i=0; i < startingMoves; i++) {
 			if (i+1 > movesAmount) {
 				stars[i].style.visibility = 'hidden';
@@ -329,14 +346,11 @@ function substractOneMove () {
 	movesNum.innerText = movesAmount;
 
 	// and correct the wording accordingly
-	if (movesAmount === 1) {
-		movesText.innerText = 'Move';
-	} else {
-		movesText.innerText = 'Moves';
-	}
+	movesText.innerText = (movesAmount === 1) ? 'Move' : 'Moves';
 
-	// if we've reached 0 moves available, well that's sad...
-	// the player lost, so disable play
+	/* if we've reached 0 moves available, well that's sad...
+	 * the player lost, so disable play
+	 */
 	if (movesAmount === 0) {
 
 		addClassesToAll(cards, 'disabled');
@@ -351,7 +365,8 @@ function substractOneMove () {
 }
 
 
-// Add 1 move to the available moves left
+/* Add 1 move to the available moves left
+ */
 function addOneMove () {
 
 	let movesAmount = parseInt(movesNum.innerText);
@@ -384,7 +399,8 @@ resetButton.addEventListener('click', function(){
  **************************************************************************************
  */
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+/* Shuffle function from http://stackoverflow.com/a/2450976
+ */
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -400,7 +416,8 @@ function shuffle(array) {
 }
 
 
-// Function to add classes to a selection of elements at once
+/* Function to add classes to a selection of elements at once
+ */
 function addClassesToAll(items, classname) {
 
 	for (var i=0; i < items.length; i++) {
@@ -409,7 +426,8 @@ function addClassesToAll(items, classname) {
 }
 
 
-// Function to remove classes from a selection of elements at once
+/* Function to remove classes from a selection of elements at once
+ */
 function removeClassesToAll(items, classname) {
 
 	for (var i=0; i < items.length; i++) {
@@ -423,7 +441,8 @@ function removeClassesToAll(items, classname) {
  **************************************************************************************
  */
 
-// This is what happens when the player loses
+/* This is what happens when the player loses
+ */
 function youLose () {
 
 	clearInterval(playTimer);
@@ -441,19 +460,15 @@ function youLose () {
 }
 
 
-// Show ending screen to end the game
+/* Show ending screen to end the game
+ */
 function youWin () {
 
 	clearInterval(playTimer);
 
 	// set text to display the amount of stars correctly
-	let movesEndText = '';
 	let movesAmount = parseInt(movesNum.innerText);
-	if (movesAmount > 1) {
-		movesEndText = 'stars';
-	} else {
-		movesEndText = 'star';
-	}
+	let movesEndText = (movesAmount > 1) ? 'stars' : 'star';
 
 	// set display block but wait a bit for the transition
 	endScreen.style.display = 'block';
