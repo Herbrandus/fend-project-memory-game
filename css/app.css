@@ -252,3 +252,64 @@ h2 {
     color: #888;
     font-size: 18px;
 }
+
+@media screen and (max-width: 768px) {
+    
+    ul.deck {
+        width: 95%;
+        min-height: auto;
+        margin: 0 auto;
+        padding: 16px;
+    }
+
+    .deck .card {
+        width: 20vw;
+        height: 20vw;
+        margin-bottom: 4%;
+    }
+
+    .score-panel {
+        width: 80%;
+    }
+
+    #moves, #timer {
+        float: right;
+        position: relative;
+        top: initial;
+        right: initial;
+        margin: 0 15% 0 0;
+        color: #444;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    
+    h2 {
+        font-size: 2em;
+        margin-top: 30vh;
+    }
+
+    ul.deck {
+        width: 100%;
+        border-radius: 0;
+        padding: 16px 20px;
+    }
+
+    .deck .card {
+        width: 40vw;
+        height: 40vw;
+        margin-bottom: 6%;
+    }
+    
+    #moves, #timer {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+
+    h1 {
+        font-size: 1.6em;
+    }
+    
+}

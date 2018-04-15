@@ -3,17 +3,28 @@
 ## Table of Contents
 
 * [Instructions](#instructions)
+* [Dependencies](#dependencies)
+* [About](#about)
 * [Contributing](#contributing)
+
 
 ## Instructions
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+This is a simple game that lets you pick two cards which will then be compared. If they match, they will stay face-up, if they do not match, you will lose a point and the cards will return face-down. 
+You win the game if all cards are matched and are facing up. You lose the game if you run out of 'stars' or available moves.
+If you guess three matches right in a row, you will be rewarded an extra star or move.
 
-I mainly edited `js/app.js` and added a score screen in `index.html` and `app.css`, because, you know, gotta know when it's ended!
-I also added some fun features to the game, like a bonus star if you guess right 3 times in a row!
+## Dependencies
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+This game is dependent on FontAwesome v4.6.1.
+It has no Javascript dependencies. 
+
+## About
+
+This game is a creation through an assignment by Udacity. They provided the layout, the HTML and CSS.
+I was tasked with writing out the Javascript. Check it out in `js/app.js`! 
+I also had to edit `index.html` and `css/app.css`.
 
 ## Contributing
 
-This is forked from the Udacity course, so contributing to this is no problem. However, it is a finished assignment.
+This is forked from the Udacity course, it is a finished assignment.
