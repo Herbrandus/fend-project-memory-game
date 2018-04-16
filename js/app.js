@@ -52,8 +52,7 @@ const cardIcons = {
 	bomb: 'fa-bomb'
 };
 
-// the maximum amount of allowed moves :)
-const startingMoves = 4;
+const startingStars = 3;
 
 // declare all variables for the game mechanics
 let cards;
@@ -80,11 +79,10 @@ const againButton = document.getElementById('again');
 const deck = document.querySelector('ul.deck');
 const endScreen = document.getElementById('endingScreen');
 
-let movesNum = document.querySelector('.moves');
 let movesText = document.querySelector('.movesText');
 let starsContainer = document.querySelector('.stars');
 let displayTimer = document.getElementById('timer');
-let movesCounter = document.getElementById('moves');
+let movesCounter = document.querySelector('.moves');
 
 /**************************************************************************************
  ******************************** Game functions **************************************
@@ -104,6 +102,7 @@ function reset() {
 	
 	// reset all starting variables
 	movesMade = 0;
+	starsAmount = startingStars;
 	winningSpree = 0;
 	failedMatches = 0;
 	activeCards = [];
@@ -149,14 +148,13 @@ function reset() {
 	// fill the stars list with correct amount of stars
 	let newStarsHtml = '';
 	
-	for (var i=0; i < startingMoves; i++) {
+	for (var i=0; i < startingStars; i++) {
 		newStarsHtml += '<li><i class="fa fa-star"></i></li>';
 	}
 
 	starsContainer.innerHTML = newStarsHtml;
 
 	// reset amount of moves to be made
-	movesNum.innerHTML = startingMoves;
 	movesText.innerHTML = 'Moves';
 	movesCounter.innerText = movesMade;
 	
@@ -193,10 +191,13 @@ function reset() {
  */
 function openCard (elem) {
 
-	elem.classList.add('open', 'show');
-	let innerClass = elem.querySelector('.fa');
+	if (!elem.classList.contains('show')) {
 
-	handleOpenCards(innerClass.classList);
+		elem.classList.add('open', 'show');
+		let innerClass = elem.querySelector('.fa');
+
+		handleOpenCards(innerClass.classList);
+	}	
 }
 
 
@@ -248,7 +249,7 @@ function matchCards () {
 		failedMatches++;
 
 		// remove a star from the total amount
-		if (failedMatches === 2) {
+		if (failedMatches === 3) {
 			substractOneMove();
 			failedMatches = 0;
 		}
@@ -264,14 +265,6 @@ function matchCards () {
 	// update the amount of moves made
 	movesMade++;
 	movesCounter.innerText = movesMade;
-
-	/* if the player has 3 correct guesses in a row
-	 * reward him by returning 1 lost star
-	 */
-	if (winningSpree === 4) {
-		addOneMove();
-		winningSpree = 0;
-	}
 
 	disablePlay = true;
 	pauseTimer = setTimeout(function(){
@@ -323,45 +316,30 @@ function removeActiveStatus (card, matches) {
  */
 function substractOneMove () {
 
-	let movesAmount = parseInt(movesNum.innerText);
-	let stars = document.querySelectorAll('.stars > li');
-
-	if (movesAmount > 0) {
-		movesAmount -= 1;
+	if (starsAmount > 1) {
+		starsAmount -= 1;
 	}
+
+	let stars = document.querySelectorAll('.stars > li');
 
 	if (stars.length > 0) {
 		
 		/* set all but the remaining stars to invisible
 		 * to maintain their position
 		 */
-		for (var i=0; i < startingMoves; i++) {
-			if (i+1 > movesAmount) {
-				stars[i].style.visibility = 'hidden';
+		for (var i=0; i < startingStars; i++) {
+			if (starsAmount === 2) {
+				stars[2].style.visibility = 'hidden';
+			} else if (starsAmount === 1) {
+				stars[1].style.visibility = 'hidden';
+				stars[2].style.visibility = 'hidden';
 			}
 		}
 	}
 
-	// Subtract 1 from the number shown
-	movesNum.innerText = movesAmount;
-
 	// and correct the wording accordingly
-	movesText.innerText = (movesAmount === 1) ? 'Move' : 'Moves';
+	movesText.innerText = (movesMade === 1) ? 'Move' : 'Moves';
 
-	/* if we've reached 0 moves available, well that's sad...
-	 * the player lost, so disable play
-	 */
-	if (movesAmount === 0) {
-
-		addClassesToAll(cards, 'disabled');
-		disablePlay = true;
-
-		// wait a bit before confronting the player with their defeat
-		pauseTimer = setTimeout(function(){
-			youLose();
-			clearTimeout(pauseTimer);
-		}, 2000);
-	}
 }
 
 
@@ -372,7 +350,7 @@ function addOneMove () {
 	let movesAmount = parseInt(movesNum.innerText);
 	let stars = document.querySelectorAll('.stars > li');
 
-	movesNum.innerText = movesAmount + 1;
+	movesNum.innerText = movesMade + 1;
 
 	// loop through stars until finding one with the visibility style
 	for (var i=0; i < stars.length; i++) {
@@ -441,24 +419,6 @@ function removeClassesToAll(items, classname) {
  **************************************************************************************
  */
 
-/* This is what happens when the player loses
- */
-function youLose () {
-
-	clearInterval(playTimer);
-
-	// set display block but wait a bit for the transition
-	endScreen.style.display = 'block';
-	setTimeout(function() {
-		// transition actived with class 'show'
-		endScreen.classList.add('show');
-
-		// Edit text in the ending screen
-		endScreen.querySelector('h2').innerText = 'You lost the game!';
-		endScreen.querySelector('p').innerText = 'You spend ' + movesMade + ' moves on it.';
-	}, 200);
-}
-
 
 /* Show ending screen to end the game
  */
@@ -467,8 +427,14 @@ function youWin () {
 	clearInterval(playTimer);
 
 	// set text to display the amount of stars correctly
-	let movesAmount = parseInt(movesNum.innerText);
-	let movesEndText = (movesAmount > 1) ? 'stars' : 'star';
+	let movesEndText = (starsAmount > 1) ? 'stars' : 'star';
+	let timeLabelEndText = (minutes > 0) ? minutes + ' minutes and ' + seconds + ' seconds' : seconds + ' seconds';
+	let hyperbole = 'Very good!';
+	if (starsAmount === 2) {
+		hyperbole = 'Awesome!';
+	} else if (starsAmount === 3) {
+		hyperbole = 'Fantastich job!!';
+	}
 
 	// set display block but wait a bit for the transition
 	endScreen.style.display = 'block';
@@ -478,7 +444,7 @@ function youWin () {
 
 		// Edit text in the ending screen
 		endScreen.querySelector('h2').innerText = 'Congratulations! You won!';
-		endScreen.querySelector('p').innerText = 'With ' + movesMade + ' moves and ' + movesAmount + ' ' + movesEndText + '!';
+		endScreen.querySelector('p').innerHTML = 'It took you ' + movesMade + ' moves during a time of ' + timeLabelEndText + '.<br>' + starsAmount + ' ' + movesEndText + ' remaining! ' + hyperbole;
 	}, 200);
 }
 
