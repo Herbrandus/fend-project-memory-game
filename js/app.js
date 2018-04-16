@@ -191,6 +191,7 @@ function reset() {
  */
 function openCard (elem) {
 
+	// without this you can click the same card for a match
 	if (!elem.classList.contains('show')) {
 
 		elem.classList.add('open', 'show');
@@ -343,26 +344,6 @@ function substractOneMove () {
 }
 
 
-/* Add 1 move to the available moves left
- */
-function addOneMove () {
-
-	let movesAmount = parseInt(movesNum.innerText);
-	let stars = document.querySelectorAll('.stars > li');
-
-	movesNum.innerText = movesMade + 1;
-
-	// loop through stars until finding one with the visibility style
-	for (var i=0; i < stars.length; i++) {
-		if (stars[i].hasAttribute('style')) {
-			// then remove this attribute and break out of loop
-			stars[i].removeAttribute('style');
-			break;
-		}
-	}
-}
-
-
 // perform a reset at the beginning
 reset();
 
@@ -428,7 +409,11 @@ function youWin () {
 
 	// set text to display the amount of stars correctly
 	let movesEndText = (starsAmount > 1) ? 'stars' : 'star';
+
+	// set text for the time it took to finish the game
 	let timeLabelEndText = (minutes > 0) ? minutes + ' minutes and ' + seconds + ' seconds' : seconds + ' seconds';
+
+	// fun message at the end depending on the remaining amount of stars
 	let hyperbole = 'Very good!';
 	if (starsAmount === 2) {
 		hyperbole = 'Awesome!';
