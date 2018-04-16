@@ -84,6 +84,7 @@ let starsContainer = document.querySelector('.stars');
 let displayTimer = document.getElementById('timer');
 let movesCounter = document.querySelector('.moves');
 
+
 /**************************************************************************************
  ******************************** Game functions **************************************
  **************************************************************************************
@@ -337,9 +338,6 @@ function substractOneMove () {
 			}
 		}
 	}
-
-	// and correct the wording accordingly
-	movesText.innerText = (movesMade === 1) ? 'Move' : 'Moves';
 
 }
 
