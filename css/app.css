@@ -292,13 +292,13 @@ h2 {
     ul.deck {
         width: 100%;
         border-radius: 0;
-        padding: 16px 20px;
+        padding: 14px 10px;
     }
 
     .deck .card {
-        width: 40vw;
-        height: 40vw;
-        margin-bottom: 6%;
+        width: 20vw;
+        height: 20vw;
+        margin-bottom: 4%;
     }
     
     #moves, #timer {
