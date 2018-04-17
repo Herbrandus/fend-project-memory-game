@@ -55,34 +55,34 @@ const cardIcons = {
 const startingStars = 3;
 
 // declare all variables for the game mechanics
-let cards,
-	activeCards,
-	openCards,
-	movesMade,
-	failedMatches,
-	winningSpree;
+let cards;
+let activeCards;
+let openCards;
+let movesMade;
+let failedMatches;
+let winningSpree;
 
 // add display timer
-let playTimer,
-	seconds,
-	minutes;
+let playTimer;
+let seconds;
+let minutes;
 
 /* these variables are used to disable play while
  * the animations are playing
  */
-let pauseTimer,
-	disablePlay;
+let pauseTimer;
+let disablePlay;
 
 // save some elements to variables to use later
-const resetButton = document.querySelector('.restart'),
-	  againButton = document.getElementById('again'),
-	  deck = document.querySelector('ul.deck'),
-	  endScreen = document.getElementById('endingScreen');
+const resetButton = document.querySelector('.restart');
+const againButton = document.getElementById('again');
+const deck = document.querySelector('ul.deck');
+const endScreen = document.getElementById('endingScreen');
 
-let movesText = document.querySelector('.movesText'),
-	starsContainer = document.querySelector('.stars'),
-	displayTimer = document.getElementById('timer'),
-	movesCounter = document.querySelector('.moves');
+let movesText = document.querySelector('.movesText');
+let starsContainer = document.querySelector('.stars');
+let displayTimer = document.getElementById('timer');
+let movesCounter = document.querySelector('.moves');
 
 
 /**************************************************************************************
@@ -386,38 +386,24 @@ document.addEventListener('keydown', function(evt){
  **************************************************************************************
  */
 
-/* Shuffle function from http://stackoverflow.com/a/2450976
+/* 	Written my own shuffle method! 
+ *	Previously:
+ * 	Shuffle function from http://stackoverflow.com/a/2450976
  */
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-
-/*	Own shuffle method
- */
-function newShuffle (array) {
-
-	let num = array.length;
+    
+    let num = array.length;
 	let numArray = [];
 	let newArray = [];
 	let newNum;
 
 	for (let i=0; i<num; i++) {
 
-		newNum = Math.ceil(Math.random() * num);
+		newNum = Math.floor(Math.random() * num);
 		
 		if (i > 0) {
-			while (array.indexOf(newNum) != -1) {
-				newNum = Math.ceil(Math.random() * num);
+			while (numArray.indexOf(newNum) !== -1) {
+				newNum = Math.floor(Math.random() * num);
 			}
 		}
 
@@ -431,7 +417,6 @@ function newShuffle (array) {
 
 	return newArray;
 }
-
 
 
 /* Function to add classes to a selection of elements at once

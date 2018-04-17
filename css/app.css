@@ -94,6 +94,10 @@ h2 {
     border: #777 solid 2px;
 }
 
+.deck .card.open:focus {
+    border: none;
+}
+
 @-webkit-keyframes success {
     0% { transform: scale(1); }
     25% { transform: scale(1.22); }
