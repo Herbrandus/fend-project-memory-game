@@ -71,17 +71,27 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: rotateY(180deg);
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+    -webkit-transition: transform .5s ease;
+    -moz-transition: transform .5s ease;
+    -ms-transition: transform .5s ease;
+    -o-transition: transform .5s ease;
+    transition: transform .5s ease;
 }
 
 .deck .card.open {
     transform: rotateY(0);
-    background: #02b3e4;
     cursor: default;
 }
 
 .deck .card.show {
     font-size: 33px;
+    background: #02b3e4;
+}
+
+.deck .card:focus {
+    border: #777 solid 2px;
 }
 
 @-webkit-keyframes success {

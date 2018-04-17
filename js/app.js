@@ -55,34 +55,34 @@ const cardIcons = {
 const startingStars = 3;
 
 // declare all variables for the game mechanics
-let cards;
-let activeCards;
-let openCards;
-let movesMade;
-let failedMatches;
-let winningSpree;
+let cards,
+	activeCards,
+	openCards,
+	movesMade,
+	failedMatches,
+	winningSpree;
 
 // add display timer
-let playTimer;
-let seconds;
-let minutes;
+let playTimer,
+	seconds,
+	minutes;
 
 /* these variables are used to disable play while
  * the animations are playing
  */
-let pauseTimer;
-let disablePlay;
+let pauseTimer,
+	disablePlay;
 
 // save some elements to variables to use later
-const resetButton = document.querySelector('.restart');
-const againButton = document.getElementById('again');
-const deck = document.querySelector('ul.deck');
-const endScreen = document.getElementById('endingScreen');
+const resetButton = document.querySelector('.restart'),
+	  againButton = document.getElementById('again'),
+	  deck = document.querySelector('ul.deck'),
+	  endScreen = document.getElementById('endingScreen');
 
-let movesText = document.querySelector('.movesText');
-let starsContainer = document.querySelector('.stars');
-let displayTimer = document.getElementById('timer');
-let movesCounter = document.querySelector('.moves');
+let movesText = document.querySelector('.movesText'),
+	starsContainer = document.querySelector('.stars'),
+	displayTimer = document.getElementById('timer'),
+	movesCounter = document.querySelector('.moves');
 
 
 /**************************************************************************************
@@ -111,6 +111,7 @@ function reset() {
 	disablePlay = false;
 	seconds = 0;
 	minutes = 0;
+	let c = 1;
 
 	clearInterval(playTimer);
 
@@ -118,11 +119,13 @@ function reset() {
 
 	shuffledDeck.forEach(function(elem){
 		let cardClass = cardIcons[elem];
-	 	deckHtml += '<li class="card">' +
+	 	deckHtml += '<li class="card" tabindex="'+c+'">' +
 	 			'<i class="fa ' + cardClass + '"></i>' +
 				'</li>';
 
 		activeCards.push(elem);
+
+		c++;
 	});
 
 	deck.innerHTML = deckHtml;
@@ -163,6 +166,7 @@ function reset() {
 	displayTimer.innerHTML = '0.00';
 
 	// display and set timer for the game
+
 	playTimer = setInterval(function(){
 
 		let displaySeconds = '';
@@ -185,6 +189,7 @@ function reset() {
 		displayTimer.innerHTML = minutes + '.' + displaySeconds;
 
 	}, 1000);
+	
 }
 
 
@@ -195,10 +200,13 @@ function openCard (elem) {
 	// without this you can click the same card for a match
 	if (!elem.classList.contains('show')) {
 
-		elem.classList.add('open', 'show');
-		let innerClass = elem.querySelector('.fa');
+		elem.classList.add('open');
+		setTimeout(function(){
+			elem.classList.add('show');
+			let innerClass = elem.querySelector('.fa');
 
-		handleOpenCards(innerClass.classList);
+			handleOpenCards(innerClass.classList);
+		}, 150);
 	}	
 }
 
@@ -218,7 +226,9 @@ function handleOpenCards (classList) {
 
 	// if there are 2 cards open, we need to check if they match
 	if (openCards.length === 2) {
-		matchCards();
+		setTimeout(function(){
+			matchCards();
+		}, 150);
 	}
 }
 
@@ -309,6 +319,7 @@ function removeActiveStatus (card, matches) {
 		let index = activeCards.indexOf(openCards[0]);
 		activeCards.splice(index, 1);
 		openCards.splice(0, 1);
+		card.removeAttribute('tabindex');
 	}
 
 }
@@ -350,6 +361,25 @@ resetButton.addEventListener('click', function(){
 	reset();
 });
 
+document.addEventListener('keydown', function(evt){
+
+	for (let i=0; i<cards.length; i++) {
+
+		if (cards[i] === document.activeElement) {
+			
+			if (evt.which == 13) {
+				
+				if (!cards[i].classList.contains('match') && !disablePlay) {
+
+					openCard(cards[i]);
+
+				}
+
+			}
+		}
+	}
+});
+
 
 /**************************************************************************************
  ************************** Supporting functions **************************************
@@ -371,6 +401,37 @@ function shuffle(array) {
 
     return array;
 }
+
+/*	Own shuffle method
+ */
+function newShuffle (array) {
+
+	let num = array.length;
+	let numArray = [];
+	let newArray = [];
+	let newNum;
+
+	for (let i=0; i<num; i++) {
+
+		newNum = Math.ceil(Math.random() * num);
+		
+		if (i > 0) {
+			while (array.indexOf(newNum) != -1) {
+				newNum = Math.ceil(Math.random() * num);
+			}
+		}
+
+		numArray.push(newNum);
+	}
+
+	for (let j=0; j<num; j++) {
+
+		newArray.push( array[ numArray[j] ] );
+	}
+
+	return newArray;
+}
+
 
 
 /* Function to add classes to a selection of elements at once
